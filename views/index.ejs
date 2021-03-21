@@ -7,12 +7,24 @@
     <title>Document</title>
 </head>
 <body>
-
-    <h1>Chat do Guia</h1>
-    <div id="chat"></div><br>
-    <input type="text" id="msg"><br>
-    <input type="text" id="username" placeholder="digite o seu nome">
-    <buton>Send</buton>
+    <div id="chat-box">
+        <div id="chat-box_itens">
+            <h1>Chat do Léo</h1>
+            <div id="chat-father">
+                <div id="chat"></div>
+            </div>
+            <br>
+            <div id="message">
+                
+                <input type="text" id="username" placeholder="digite o seu nome"><br>
+                <input type="text" id="msg" placeholder="sua mensagem">
+               
+                <button onClick="enviar()">Send</button>
+            </div>
+          
+        </div>
+    
+    </div>
 
 
 </body>
@@ -24,8 +36,67 @@
     socket.on("disconnect", () => {
         console.log("Desconectado");
     })
- 
-
+    socket.on("show", (data) => {
+        var chat = document.getElementById('chat');
+        var p = document.createElement('p');
+        p.innerHTML = `${data.username}: ${data.msg}`;
+        chat.append(p);
+    })
+    function enviar(){
+        var msg = document.getElementById('msg').value;
+        var username = document.getElementById('username').value;
+        document.getElementById('msg').value = '';
+        socket.emit("msg", {msg, username});
+    }
 </script>
-
 </html>
+<style>
+    body{
+        background-color:rgba(140, 243, 209, 0.39);
+    }
+    #chat-box{
+        width:100%;
+        height:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    }
+    #chat-box_itens{
+        background-color:white;
+        padding:3vw;
+        display:flex;
+        flex-direction:column;
+        width:100%;
+    }
+    #chat-box_itens div{
+        margin-top:2vw;
+        
+    }
+    #chat-box_itens div input{
+        margin:0.3vw 0vw;
+        width:20vw;
+        height:2vw;
+    }
+    #chat-box_itens div #msg{
+        width:60%;
+    }
+    button{
+        width:7vw;
+        height:5vh;
+
+    }
+    #chat-father{
+        padding:1vw;
+        width:100%;
+        height:80vh;
+        background-color:cadetblue;
+        overflow-y:auto;
+    }
+    #chat{
+        width:60%;
+        word-break:break-all;
+    }
+
+  
+    
+</style>
